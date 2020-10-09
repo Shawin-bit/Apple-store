@@ -3,6 +3,7 @@ const $container = document.getElementById('container')
 const $addRed = document.getElementById('add-red')
 const $addGreen = document.getElementById('add-green')
 const $addBlue = document.getElementById('add-blue')
+const $buttonSet =document.getElementById('button-set')
 
 // Variables
 const itemInfo = {
@@ -12,6 +13,8 @@ const itemInfo = {
     quanitity: 10
 }
 let itemCount = 0
+
+let cart = []
 
 // Functions
 function capitalize(inputString) {
@@ -29,7 +32,16 @@ function addItem() {
             <p>${capitalize(color)} ${itemInfo.title}</p>
             <p>${itemInfo.price}</p>
             <p>${itemInfo.description}</p>
-            <p>${itemInfo.quantity} remaining</p>
+            <p><span>${itemInfo.quantity}</span> remaining</p>
+            <p>
+                <span>Quantity</span>
+                <button class='plus'>+</button>
+                <button class='minus'>-</button>
+                <span class='quanitity'>0</span>
+            </p>
+            <p>
+                <button class='add-to-cart'>Add to Cart</button>
+            </p>
         </div>
     `
 
@@ -45,12 +57,37 @@ function addItem() {
     const $item = document.getElementById(`item-${itemCount}`)
      $item.insertBefore($icon, $item.firstElementChild)
 
+//add event listeners to new buttons
+    document.querySelector(`#item-${itemCount} .plus`).addEventListener('click', plusItem)
+    document.querySelector(`#item-${itemCount} .minus`).addEventListener('click', minusItem)
+    document.querySelector(`#item-${itemCount} .add-to-cart`).addEventListener('click', addToCart)
+
     itemCount++
 
 }
 
+function plusItem(event){
+    event.target.parentElement.children[3].textContent++
+}
+
+function minusItem(event) {
+    event.target.parentElement.children[3].textContent--
+}
+
+function addToCart(event) {
+ 
+    let quantity = event.target.closest('div').children[5].children[3].textContent
+  
+    for(let i = quantity; i > 0; i--){
+    cart.push(event.target.closest('div').getAttribute('id'))
+    }
+  
+    event.target.closest('div').children[4].firstElementChild.textContent -= quantity
+
+
+    console.log(`Cart: ${cart}`)
+}
 
 // Event Listeners
-$addRed.addEventListener('click', addItem)
-$addGreen.addEventListener('click', addItem)
-$addBlue.addEventListener('click', addItem)
+$buttonSet.addEventListener('click', addItem)
+
